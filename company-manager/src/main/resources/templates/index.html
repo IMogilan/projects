@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <meta charset="UTF-8">
+        <title>Company Management System</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="icon" type="image/x-icon" th:href="@{/image/favicon_circle/favicon.ico}">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" th:href="@{/}">
+                        <img th:src="@{/image/favicon_circle/android-chrome-192x192.png}" alt="CMS Logo" style="width:40px;" class="rounded-pill">
+                        Company Management System
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                        <ul class="navbar-nav">
+                            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/login}">Login</a>
+                            </li>
+                            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/registration}">Registration</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/logout}">Logout</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/employee}">Employees</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <br>
+        <div class="container my-2 text-center">
+            <h1>Welcome <span sec:authentication="principal.username">User</span> to Company Management System!</h1>
+            <a th:href="@{/employee}" class="btn btn-primary btn-sm mb-3">Show all employees</a>
+        </div>
+    </body>
+</html>

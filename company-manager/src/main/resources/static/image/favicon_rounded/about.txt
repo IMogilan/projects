@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Scope One
+- Font Author: Copyright 2015 Dalton Maag Ltd (info@daltonmaag.com)
+- Font Source: http://fonts.gstatic.com/s/scopeone/v14/WBLnrEXKYFlGHrOKmGD1W0_MJMGxiQ.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))

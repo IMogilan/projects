@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registration</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="icon" type="image/x-icon" th:href="@{/image/favicon_circle/favicon.ico}">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" th:href="@{/}">
+                        <img th:src="@{/image/favicon_circle/android-chrome-192x192.png}" alt="CMS Logo" style="width:40px;" class="rounded-pill">
+                        Company Management System
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                        <ul class="navbar-nav">
+                            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/login}">Login</a>
+                            </li>
+                            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/registration}">Registration</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/logout}">Logout</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/employee}">Employees</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <br><br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-4">
+                    <div th:if="${param.success}">
+                        <div class="alert alert-info">You've successfully registered!</div>
+                    </div>
+                    <h1>Registration</h1>
+                    <form action="#" th:action="@{/registration}" method="post" th:object="${user}">
+                        <div class="mb-3">
+                            <label class="form-label" for="firstName">First Name:</label>
+                            <input type="text" th:field="*{firstName}" placeholder="Please use only letters or numbers"
+                                   class="form-control" id="firstName" required autofocus="autofocus">
+                            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="alert alert-danger"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="lastName">Last Name:</label>
+                            <input type="text" th:field="*{lastName}" placeholder="Please use only letters or numbers"
+                                   class="form-control" id="lastName" required autofocus="autofocus">
+                            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="alert alert-danger"></div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email:</label>
+                            <input type="text" th:field="*{email}" placeholder="Enter work email"
+                                   class="form-control" id="email" required autofocus="autofocus">
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Password:</label>
+                            <input type="password" th:field="*{password}" placeholder="Enter you password"
+                                   class="form-control" id="password" required autofocus="autofocus">
+                            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert alert-danger"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="submit" value="Register" class="btn btn-success btn-sm">
+                        </div>
+                        <span>Already registered?</span>
+                        <a th:href="@{/login}">Login here</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

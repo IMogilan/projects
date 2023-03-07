@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Employee Info</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="icon" type="image/x-icon" th:href="@{/image/favicon_circle/favicon.ico}">
+    </head>
+    <body>
+        <div class="container my-2">
+            <h1>Employee Info:</h1>
+            <form action="#" th:action="@{/employee/save-employee}" method="post" th:object="${employee}">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name:</label>
+                    <input type="text"
+                           th:field="*{firstName}"
+                           placeholder="Please use only letters or numbers"
+                           class="form-control mb-4 col-4"
+                           id="firstName">
+                    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="alert alert-danger"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Last Name:</label>
+                    <input type="text"
+                           th:field="*{lastName}"
+                           placeholder="Please use only letters or numbers"
+                           class="form-control mb-4 col-4"
+                           id="lastName">
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="alert alert-danger"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="text"
+                           th:field="*{email}"
+                           placeholder="Enter work email"
+                           class="form-control mb-4 col-4"
+                           id="email">
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></div>
+                </div>
+
+                <input type="submit" value="Save changes" class="btn btn-primary btn-sm mb-3"> <a th:href="@{/employee}" class="btn btn-secondary btn-sm mb-3">Cancel</a>
+            </form>
+        </div>
+    </body>
+</html>

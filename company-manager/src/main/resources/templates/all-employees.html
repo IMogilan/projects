@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <meta charset="UTF-8">
+        <title>Employees</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="icon" type="image/x-icon" th:href="@{/image/favicon_circle/favicon.ico}">
+        <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" th:href="@{/}">
+                        <img th:src="@{/image/favicon_circle/android-chrome-192x192.png}" alt="CMS Logo" style="width:40px;" class="rounded-pill">
+                        Company Management System
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                        <ul class="navbar-nav">
+                            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/login}">Login</a>
+                            </li>
+                            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/registration}">Registration</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/logout}">Logout</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()" class="nav-item">
+                                <a class="nav-link" th:href="@{/employee}">Employees</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container my-2">
+            <div th:if="${param.success}">
+                <div class="alert alert-info">Information successfully updated!</div>
+            </div>
+            <h1>Employee List</h1>
+            <table class="table table-striped table-hover table-bordered table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>Employee First Name </span>
+                            <a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=${currentPageNumber}, pageSize=${pageSize}, sortCondition='firstName',sortDirection=${reverseSortDirection})}" class="btn btn-secondary btn-sm ms-4">Sort &#x21F5</a>
+                        </th>
+                        <th>
+                            <span>Employee Last Name </span>
+                            <a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=${currentPageNumber}, pageSize=${pageSize}, sortCondition='lastName',sortDirection=${reverseSortDirection})}" class="btn btn-secondary btn-sm  ms-4">Sort &#x21F5</a>
+                        </th>
+                        <th>
+                            <span>Employee Email </span>
+                            <a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=${currentPageNumber}, pageSize=${pageSize}, sortCondition='email',sortDirection=${reverseSortDirection})}" class="btn btn-secondary btn-sm  ms-4">Sort &#x21F5</a>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="empl : ${employeesList}">
+                        <td th:text="${empl.firstName}"></td>
+                        <td th:text="${empl.lastName}"></td>
+                        <td th:text="${empl.email}"></td>
+                        <td><a th:href="@{/employee/{id}(id=${empl.id})}" class="btn btn-secondary btn-sm mb-3">View</a>
+                            <a th:href="@{/employee/update/{id}(id=${empl.id})}" class="btn btn-primary btn-sm mb-3">Edit</a>
+                            <a th:href="@{/employee/delete/{id}(id=${empl.id})}" class="btn btn-danger btn-sm mb-3">Delete</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p th:if="${employeesList.isEmpty()}">There are no employees yet</p>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <a th:href="@{/employee/new-employee}" class="btn btn-primary btn-sm mb-3">Add employee</a>
+                </div>
+                <div class="col-sm-9 text-end">
+                    <span>Total Rows: [[${totalElements}]]</span> &nbsp;&nbsp;
+                    <span>Rows on page:</span>
+                    <!--   <select onchange="window.location.href = '/employee/page/1/' + this.value">   -->
+                    <select onchange="changeEmployeePageSize(this)">
+                        <option th:each="size : ${pageSizeOptions}" th:value="${size}" th:text="${size}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div th:if="${totalPages > 1}">
+                <ul class="pagination pagination-sm justify-content-center">
+                    <li th:if="${currentPageNumber > 1}" class="page-item"><a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=1, pageSize=${pageSize}, sortCondition=${sortCondition},sortDirection=${sortDirection})}" class="page-link">First</a></li>
+                    <li th:unless="${currentPageNumber > 1}" class="page-item disabled"><a href="#" class="page-link">First</a></li>
+
+                    <li th:if="${currentPageNumber > 1}" class="page-item"><a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=${currentPageNumber - 1}, pageSize=${pageSize}, sortCondition=${sortCondition},sortDirection=${sortDirection})}" class="page-link">Prev</a></li>
+                    <li th:unless="${currentPageNumber > 1}" class="page-item disabled"><a href="#" class="page-link">Prev</a></li>
+
+                    <div th:if="${totalPages > 1}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                        <li th:if="${i != currentPageNumber}" class="page-item"><a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=${i}, pageSize=${pageSize}, sortCondition=${sortCondition},sortDirection=${sortDirection})}" class="page-link">[[${i}]]</a></li>
+                        <li th:unless="${i != currentPageNumber}" class="page-item active"><a href="#" class="page-link">[[${i}]]</a></li>
+                    </div>
+
+                    <li th:if="${currentPageNumber < totalPages}" class="page-item"><a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=${currentPageNumber + 1}, pageSize=${pageSize}, sortCondition=${sortCondition},sortDirection=${sortDirection})}" class="page-link">Next</a></li>
+                    <li th:unless="${currentPageNumber < totalPages}" class="page-item disabled"><a href="#" class="page-link">Next</a></li>
+
+                    <li th:if="${currentPageNumber < totalPages}" class="page-item"><a th:href="@{/employee/page/{pageNumber}/{pageSize}(pageNumber=${totalPages}, pageSize=${pageSize}, sortCondition=${sortCondition},sortDirection=${sortDirection})}" class="page-link">Last</a></li>
+                    <li th:unless="${currentPageNumber < totalPages}" class="page-item disabled"><a href="#" class="page-link">Last</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

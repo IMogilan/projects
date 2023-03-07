@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/image/favicon_circle/favicon.ico}">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <img th:src="@{/image/favicon_circle/android-chrome-192x192.png}" alt="CMS Logo" style="width:40px;" class="rounded-pill">
+                Company Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/registration}">Registration</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/employee}">Employees</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-4">
+
+            <h1>User Login Page</h1>
+            <form th:action="@{/login}" method="post">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">Invalid email or password.</div>
+                </div>
+
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info">You've been successfully logged out!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="username">Username (email): </label>
+                    <input type="text" id="username" name="username"
+                           placeholder="Enter work email" class="form-control" required autofocus="autofocus">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="password">Password:</label>
+                    <input type="password" id="password" name="password"
+                           placeholder="Enter you password" class="form-control" required autofocus="autofocus">
+                </div>
+
+                <div class="mb-3">
+                    <input type="submit" value="Login In"
+                           id="login-submit" name="login-submit"
+                           class="btn btn-success btn-sm">
+                </div>
+            </form>
+
+            <span>New User?</span>
+            <a th:href="@{/registration}">Register here</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
